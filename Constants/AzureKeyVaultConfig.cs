@@ -5,6 +5,7 @@
         MailjetApiKey,
         MailjetApiSecret,
         BLOBConnectionString,
-        BLOBContainerName
+        BLOBContainerName,
+        DBConnectionString
     }
 }

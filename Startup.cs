@@ -5,6 +5,10 @@ using SummitStories.API.Email.HostedServices;
 using SummitStories.API.Email.Interfaces;
 using SummitStories.API.Modules.Blob.Interfaces;
 using SummitStories.API.Modules.Blob.Repositories;
+using SummitStories.API.Modules.Data.Interfaces;
+using SummitStories.API.Modules.Data.Repositories;
+using SummitStories.API.Modules.SqlDb.Interfaces;
+using SummitStories.API.Modules.SqlDb.Services;
 
 namespace SummitStories.API
 {
@@ -41,6 +45,13 @@ namespace SummitStories.API
             //    return new(mailjetApiKey, mailjetApiSecret);
             //});
 
+            services.AddScoped<ISqlDbService, SqlDbService>(provider =>
+            {
+                string dbConnectionString = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.DBConnectionString)) ?? "";
+                return new(dbConnectionString);
+            });
+
+            services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IEmailSender, MailJetProvider>();
 
             services.AddScoped<IBlobStorageRepository, BlobStorageRepository>(provider =>
