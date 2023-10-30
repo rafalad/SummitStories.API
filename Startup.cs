@@ -52,6 +52,7 @@ namespace SummitStories.API
             });
 
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IEmailSender, MailJetProvider>();
 
             services.AddScoped<IBlobStorageRepository, BlobStorageRepository>(provider =>
