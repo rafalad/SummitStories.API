@@ -2,7 +2,7 @@
 
 namespace SummitStories.API.Modules.Data.Interfaces;
 
-public interface ICountryRepository : IGenericRepository
+public interface IArticleRepository : IGenericRepository
 {
-    public IList<Country> GetCountries();
+    public IList<Article> GetCountries();
 }

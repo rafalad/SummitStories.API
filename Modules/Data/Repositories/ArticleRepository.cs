@@ -5,13 +5,13 @@ using SummitStories.API.Modules.SqlDb.Interfaces;
 
 namespace SummitStories.API.Modules.Data.Repositories;
 
-public class CountryRepository : GenericRepository, ICountryRepository
+public class ArticleRepository : GenericRepository, IArticleRepository
 {
-    public CountryRepository(ISqlDbService sqlDbService, ILogger<CountryRepository> logger) : base(sqlDbService, logger) { }
+    public ArticleRepository(ISqlDbService sqlDbService, ILogger<ArticleRepository> logger) : base(sqlDbService, logger) { }
 
-    public IList<Country> GetCountries()
+    public IList<Article> GetCountries()
     {
-        IList<Country> countries = new List<Country>();
+        IList<Article> countries = new List<Article>();
         string queryString =
             "SELECT *\n" +
             "FROM dbo.Countries";

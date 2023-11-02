@@ -10,6 +10,7 @@ using SummitStories.API.Modules.Data.Repositories;
 using SummitStories.API.Modules.SqlDb.Interfaces;
 using SummitStories.API.Modules.SqlDb.Services;
 
+
 namespace SummitStories.API
 {
     public class Startup
@@ -24,12 +25,20 @@ namespace SummitStories.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Inne konfiguracje usług
+            services.AddControllers();
 
+            services.AddScoped<ISqlDbService, SqlDbService>(provider =>
+            {
+                string dbConnectionString = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.DBConnectionString)) ?? "";
+                return new(dbConnectionString);
+            });
+
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<IEmailSender, MailJetProvider>();
             services.AddSingleton<EmailHostedService>();
             services.AddHostedService(provider => provider.GetService<EmailHostedService>());
-
-            services.AddControllers(); // Dodaj kontrolery
 
             //services.AddMailService(provider =>
             //{
@@ -45,15 +54,13 @@ namespace SummitStories.API
             //    return new(mailjetApiKey, mailjetApiSecret);
             //});
 
-            services.AddScoped<ISqlDbService, SqlDbService>(provider =>
-            {
-                string dbConnectionString = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.DBConnectionString)) ?? "";
-                return new(dbConnectionString);
-            });
-
-            services.AddScoped<ICountryRepository, CountryRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
-            services.AddScoped<IEmailSender, MailJetProvider>();
+            //services.AddScoped<IStravaRepository, StravaRepository>(provider =>
+            //{
+            //    ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>()!;
+            //    ILogger<StravaRepository> logger = loggerFactory.CreateLogger<StravaRepository>();
+            //    string StravaAccessToken = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.StravaAccessToken)) ?? "";
+            //    return new(logger, null, StravaAccessToken);
+            //});
 
             services.AddScoped<IBlobStorageRepository, BlobStorageRepository>(provider =>
             {
@@ -63,14 +70,13 @@ namespace SummitStories.API
                 return new(logger, null, blobConnectionString);
             });
 
-            // Konfiguracja Swagger
             if (Env.IsDevelopment())
             {
                 services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Title = "SummitStories API",
+                        Title = "SummitStories.blog API",
                         Version = "v1"
                     });
                 });
@@ -83,11 +89,10 @@ namespace SummitStories.API
             {
                 app.UseDeveloperExceptionPage();
 
-                // Konfiguracja Swagger
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Summit Stories Backend API v1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SummitStories.blog API v1");
                 });
             }
             else
@@ -97,11 +102,8 @@ namespace SummitStories.API
                 app.UseHsts();
             }
 
-            // Inne konfiguracje middleware, takie jak HTTPS, jeśli są potrzebne
-
             app.UseHttpsRedirection();
 
-            // Mapowanie ścieżki na akcję kontrolera
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

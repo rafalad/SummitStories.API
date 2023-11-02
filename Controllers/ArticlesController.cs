@@ -8,27 +8,27 @@ namespace SummitStories.API.Controllers;
 [ApiController]
 [Route("api")]
 [Produces("application/json")]
-public class CountryController : ControllerBase
+public class ArticlesController : ControllerBase
 {
-    private readonly ICountryRepository _countryRepository;
+    private readonly IArticleRepository _countryRepository;
 
-    public CountryController(ICountryRepository countryRepository)
+    public ArticlesController(IArticleRepository countryRepository)
     {
         _countryRepository = countryRepository;
     }
 
-    [HttpOptions("countries")]
+    [HttpOptions("articles")]
     public IActionResult Preflight()
     {
         return NoContent();
     }
 
-    [HttpGet("countries")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<Country>))]
+    [HttpGet("articles")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<Article>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponse))]
     public IActionResult GetCountries()
     {
-        IList<Country> results = _countryRepository.GetCountries();
+        IList<Article> results = _countryRepository.GetCountries();
         return Ok(results);
     }
 }

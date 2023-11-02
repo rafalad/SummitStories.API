@@ -82,7 +82,7 @@ public class CommentRepository : GenericRepository, ICommentRepository
 
     public async Task<Comment> GetCommentForArticle(int articleId, int commentId)
     {
-        Comment comment = null;
+        Comment? comment = null;
         IList<IDbDataParameter> paramValues = new List<IDbDataParameter>
     {
         new SqlParameter("@articleId", articleId),
@@ -112,21 +112,16 @@ public class CommentRepository : GenericRepository, ICommentRepository
 
     public async Task<Comment> UpdateCommentForArticle(int articleId, int commentId, Comment updatedComment)
     {
-        // Upewnij się, że komentarz o identyfikatorze `commentId` istnieje i należy do artykułu o identyfikatorze `articleId`.
-
         Comment existingComment = await GetCommentForArticle(articleId, commentId);
 
         if (existingComment == null)
         {
-            return null; // Komentarz nie został znaleziony.
+            return null;
         }
-
-        // Tutaj możesz przeprowadzić logikę aktualizacji komentarza na podstawie wartości zawartych w `updatedComment`.
 
         existingComment.Content = updatedComment.Content;
         existingComment.Author = updatedComment.Author;
 
-        // Aktualizuj komentarz w bazie danych.
         string updateQuery = @"
         UPDATE dbo.Comments
         SET Content = @Content, Author = @Author
@@ -169,10 +164,9 @@ public class CommentRepository : GenericRepository, ICommentRepository
 
         if (existingComment == null)
         {
-            return; // Komentarz nie został znaleziony, więc nie można go usunąć.
+            return;
         }
 
-        // Usuń komentarz z bazy danych.
         string deleteQuery = @"
                 DELETE FROM dbo.Comments
                 WHERE ArticleId = @ArticleId AND CommentId = @CommentId";
