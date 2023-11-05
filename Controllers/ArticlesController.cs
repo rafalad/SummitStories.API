@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SummitStories.API.Models;
 using SummitStories.API.Modules.Data.Interfaces;
 using SummitStories.API.Modules.Data.Models;
 
 namespace SummitStories.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api")]
 [Produces("application/json")]

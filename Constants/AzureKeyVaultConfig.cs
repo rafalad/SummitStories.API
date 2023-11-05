@@ -1,4 +1,6 @@
-﻿namespace SummitStories.API.Constants
+﻿using static System.Net.WebRequestMethods;
+
+namespace SummitStories.API.Constants
 {
     public enum AzureKeyVaultConfig
     {
@@ -6,6 +8,9 @@
         MailjetApiSecret,
         BLOBConnectionString,
         BLOBContainerName,
-        DBConnectionString
+        DBConnectionString,
+        JWTValidIssuer,
+        JWTValidAudience,
+        JWTSecretKey
     }
 }
