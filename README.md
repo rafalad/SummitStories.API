@@ -1,6 +1,6 @@
 # Blog API
 
-The Blog API is a web service built using ASP.NET Core that provides functionality for managing a blog. It includes authentication and authorization using JWT (JSON Web Tokens), file handling with Azure Blob Storage, and email handling through the MailJet API with Razor templates.
+SummitStories Blog API is a web service built using ASP.NET Core that provides functionality for managing my mountain blog. It includes authentication and authorization using JWT (JSON Web Tokens), file handling with Azure Blob Storage, and email handling through the MailJet API with Razor templates.
 
 ## Features
 
