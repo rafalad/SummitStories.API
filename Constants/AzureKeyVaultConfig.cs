@@ -4,13 +4,14 @@ namespace SummitStories.API.Constants
 {
     public enum AzureKeyVaultConfig
     {
-        MailjetApiKey,
-        MailjetApiSecret,
         BLOBConnectionString,
         BLOBContainerName,
         DBConnectionString,
         JWTValidIssuer,
         JWTValidAudience,
-        JWTSecretKey
+        JWTSecretKey,
+        MailjetApiKey,
+        MailjetApiSecret,
+        MailjetApiEmail
     }
 }

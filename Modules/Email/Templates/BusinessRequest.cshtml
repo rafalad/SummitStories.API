@@ -1,0 +1,27 @@
+﻿@model dynamic
+
+@{
+    Layout = "./_Layout.cshtml";
+}
+
+@section body {
+    <tr>
+        <td style="border-top: 2px solid #C4C4C4; padding:30px 30px 55px 30px;">
+            <p style="color: #767676;">
+                Hello Administrator <br><br>
+                @Model.Name sent an example of an email template <br>
+            </p>
+            <b>Email: </b> <span style="color: #767676;"><b>@Model.Email</b></span> <br>
+            <b>Message: </b> <span style="color: #767676;"><b>@Model.Message</b></span> <br>
+
+            <p style="color: #767676;">
+                <br>
+                Should you require further information,
+                you can contact @Model.Name directly: <a>@Model.Email</a> <br><br><br>
+                Best Regards, <br>
+                SummitStories Team
+            </p>
+
+        </td>
+    </tr>
+}

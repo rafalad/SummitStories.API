@@ -1,56 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SummitStories.API.Email.Model;
-using SummitStories.API.Email.HostedServices;
+using SummitStories.API.Constants;
+using SummitStories.API.Modules.Email.Interfaces;
+using SummitStories.API.Modules.Email.Models;
 
 namespace SummitStories.API.Controllers
 {
     [Route("api")]
-    public class EmailController : ControllerBase
+    public class EmailController : Controller
     {
-        private readonly EmailHostedService _emailHostedService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public EmailController(EmailHostedService emailHostedService)
+        public EmailController(IEmailService emailService, IConfiguration configuration)
         {
-            _emailHostedService = emailHostedService;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
-        [HttpGet("email-confirmation-noreplay")]
-        public async Task<IActionResult> TestEmail()
+        [HttpPost("email/send")]
+        public async Task<IActionResult> BusinessContactRequest([FromBody] BusinessRequestEmailDetails businessRequestDetails)
         {
-            try
-            {
-                await _emailHostedService.SendEmailAsync(new EmailModel
-                {
-                    EmailAddress = "rafal.adamczyk01@gmail.com",
-                    Subject = "Thanks!",
-                    Body = "<strong>Thank you for your message. I will reply soon!<br><br>" +
-                           "Cheers!<br>" +
-                            "Rafał from SummitStories.blog</strong>",
+            var subject = $@"Inquiry from {businessRequestDetails.Name}""";
+            var LoefiAdminEmail = _configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiEmail)) ?? "";
 
-                    Attachments = null
-                });
+            var response = await _emailService.SendEmail(EmailTemplateNames.BusinessRequest, businessRequestDetails, subject, LoefiAdminEmail, businessRequestDetails.ApplicationOwnerEmail);
 
-                return Ok("Noreply email sent successfully");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Error sending noreply email");
-            }
-        }
-
-        [HttpPost("email-send")]
-        public async Task<IActionResult> SendEmail([FromBody] EmailModel emailRequest)
-        {
-            try
-            {
-                await _emailHostedService.SendEmailAsync(emailRequest);
-
-                return Ok("Email sent successfully");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Error sending email");
-            }
+            return Ok(response);
         }
     }
 }

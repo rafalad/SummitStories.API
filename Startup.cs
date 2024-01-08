@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Mailjet.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SummitStories.API.Auth;
 using SummitStories.API.Constants;
-using SummitStories.API.Email.EmailProvider;
-using SummitStories.API.Email.HostedServices;
-using SummitStories.API.Email.Interfaces;
 using SummitStories.API.Modules.Blob.Interfaces;
 using SummitStories.API.Modules.Blob.Repositories;
 using SummitStories.API.Modules.Data.Interfaces;
 using SummitStories.API.Modules.Data.Repositories;
+using SummitStories.API.Modules.Email;
+using SummitStories.API.Modules.Email.Interfaces;
 using SummitStories.API.Modules.SqlDb.Interfaces;
 using SummitStories.API.Modules.SqlDb.Services;
 using System.Text;
@@ -70,52 +69,25 @@ public class Startup
 
         services.AddLogging(builder =>
         {
-            builder.AddConsole(); // Dodaj logowanie do konsoli
-                                  // Dodaj inne dostępne dostawcy logowania, jeśli to konieczne
+            builder.AddConsole();
+                                 
         });
 
-        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //.AddJwtBearer(options =>
-        //{
-        //    string issuer = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.JWTIssuer)) ?? "";
-        //    string secretKey = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.JWTSecretKey)) ?? "";
-
-        //    options.TokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateIssuer = true,
-        //        ValidateAudience = true,
-        //        ValidateLifetime = true,
-        //        ValidateIssuerSigningKey = true,
-        //        ValidIssuer = issuer,
-        //        ValidAudience = issuer,
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-        //    };
-        //});
-
         services.AddControllers();
-
-        
 
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
 
-        services.AddScoped<IEmailSender, MailJetProvider>();
-        services.AddSingleton<EmailHostedService>();
-        services.AddHostedService(provider => provider.GetService<EmailHostedService>());
-
-        //services.AddMailService(provider =>
-        //{
-        //    string MailjetApiKey = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiKey)) ?? "";
-        //    string MailjetApiSecret = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiSecret)) ?? "";
-        //    return new(MailjetApiKey, MailjetApiSecret);
-        //});
-
-        //services.AddScoped<IEmailSender, EmailSender>(provider =>
-        //{
-        //    string mailjetApiKey = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiKey)) ?? "";
-        //    string mailjetApiSecret = Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiSecret)) ?? "";
-        //    return new(mailjetApiKey, mailjetApiSecret);
-        //});
+        services.AddRazorPages();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+        services.AddHttpClient<IMailjetClient, MailjetClient>(client =>
+        {
+            client.SetDefaultSettings();
+            client.UseBasicAuthentication(
+                Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiKey)) ?? "",
+                Configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiSecret)) ?? "");
+        });
 
         //services.AddScoped<IStravaRepository, StravaRepository>(provider =>
         //{

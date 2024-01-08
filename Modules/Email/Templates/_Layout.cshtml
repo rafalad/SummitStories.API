@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <style>
+        * {
+            font-family: 'Open Sans Bold', 'Open Sans Regular', 'Open Sans', sans-serif;
+        }
+
+        .outer-table {
+            width: 100%;
+        }
+
+        .inner-table {
+            border: 1px solid #9B9B9B;
+            margin: 0 auto;
+            width: 500px;
+        }
+
+        .logo-cell {
+            border-bottom: 1px solid #9B9B9B;
+            padding: 20px 10px;
+            text-align: left;
+        }
+
+        .greeting-cell {
+            padding: 10px;
+            color: #009BA5;
+            font-weight: 700;
+            font-size: 14pt;
+            text-align: left;
+        }
+
+        .app-name-cell {
+            padding: 10px;
+            color: #009BA5;
+            font-weight: 700;
+            font-size: 14pt;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        .footer-cell {
+            padding: 20px 10px;
+            background-color: #009BA5;
+            color: #FFFFFF;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .content-cell {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+            white-space: pre-line;
+        }
+
+        .invite-note {
+            padding: 10px;
+            max-width: 90%;
+            height: auto;
+            border: 1px solid #009BA5;
+            white-space: pre-line;
+        }
+
+        .invite-container {
+            border-top: none;
+            border-bottom: none;
+            border-left: solid #9B9B9B 1.0pt;
+            border-right: solid #9B9B9B 1.0pt;
+            padding: 7.5pt 7.5pt 7.5pt 7.5pt;
+        }
+    </style>
+
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <table class="outer-table" aria-describedby="outertable">
+        <tbody>
+            <tr>
+                <td style="text-align: center;">
+                    <table class="inner-table" aria-describedby="innertable">
+                        <tbody>
+                            <tr>
+                                <td class="logo-cell">
+                                    <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAALMAAAAgCAYAAABZ5kkeAAAABmJLR0QA/wD/AP+gvaeTAAALbUlEQVR42u1cCZAWxRVuUBQ1IWoCREGSICK6EeQwQRIxyqFGdBMVOeNVoCkx0Vo0omgqApZYSogCXlETKANIBS+SNYiw2X/+HzQxqHiDyCWwRuSSZYHd5c97PW/wzft7emb+Y7dSNa/q1b90v37T3fN19zt6UCqhhJqIsgvUYVlHPQm8G3g18MBkVhL6/wRzSl0BAM4e4rRal8xK4fS1ZAqaAcyOutEHZkfVZrOqRTIz+VMG5xX41WQqmhjMadUJeCcD8xPJrBRG/yUwr0+mohkAXaU6AoivB1BfCrtyy2RGEjAnlFAC5oRKQ4cBnwF8IfBQ4AHA34vZvjvwEOCfAfcD/k6pwJx9Qx2dzajB4JHfCUfk74EfhuNyCvyOylarkyLrWa66QLurqC3qeAh0ToK/R6JNGatPGdUO2gwDHb/Tutx+3a2P8NdUm1i6FqtjoN2poKu3Zkt7MBW+DTI9Dsnmwxl1JsxpqxCT5FiYm3Lg3+p5ctQf9FgxKlKlvmVq8xHwAXKMbMpxotcCfwn8YMjc3Aa8E/hzg86OwLOAvyBQSd4APBH4qADdWD6JgVLyJ8APAfdkbT4OkDXxp7zP2Up1JLzke2ASdwhPnHMjcCVw18AXk1K9oD5l0fGVnmp1SsiC6ABys4HrLbr2wjNnZJeob1gB7KjxwG8CN4j2f/HJVqt+UDYXdG4LGUMcfj4g6nEc8EzgOkvbA8BzcGHxtg57kT+0zOEdTK4O+GiL7DsMWJzOB94eEVT/AT5OtMdnLo/Y/iBwX2AM/eyNAeYGbyHRpK6I8XJ2IGgNXvxFULc/hp4voU0fy6LYGkPXW7jD5eiBBQN1H1naLWHgmgJ8sIgg9uLMKw1A7gxjXBNDxzp0Kr32d7EXWWEBaLV46RcEyCEAG0lmFis/jXZ1DzAzgPsQcA4H7gA8EngVe8aTQvckVvcu8CjgMjo1egOXA0+n3R374K3absADiXdS+xpWxrlMTyrEP2FS/y4mb7ve7VJqLPx9nTYPcgHxDo+d6qMyd1ffg7uSNgvw6HSfs0/IrJXHMB6tUL5RyK3WJ0dKXQN/j4Pf6bqfXCal55rv7EdZALNdPzulT1elj3l/PfZzlh6/o4ZoM8tREzWo/CBbBb+PC37JBmZtyjnqbfG8TcBT9fPS6gb6e4uQec7TcRYDyMIAgLYhUwRl9tHvtADZi5m+cla+lJUPtywa3H0/JLm94gRYQ+XYl/Yh9nTPQmxmeIkX57wcsFENdt3hUPc3IduH7TQVYuLXm2xsaFOWA8K0ulL06QFpCuDzDX1vSyD46sRYoOfE69M48ZydZLN/3bBTviwWRnnAfOEzv2Cy7xtOg/5WMKfVLWJ8ryDAA8wjDvp6WKDHY11L9oI/C3i3l1F9LfBM+ntVgOx9VF8P7Nlr32dAfiGCP3I3kz+dlddS2dpSRzPIBuYT29si+xPxkkaxFySB/ktLUuFe8czH2K7VCv69i9V9ZnrRTNc94rknsv6+IgA61jI2btLU2TJ2OTsvASwymP2nRR04oe0tm81Yn66M3pQ1zWfg6WJo+wTVocE+iNmkJxhkPRu8mpXdwvRfEQFwtzN57lR9whZKp1KBmYCzh03WByG7eC8BwqEMVKsEcH5kAcMIoaeSRS7OFnoeDVmM433yzPs3HNOdLYuCZ+w+tT4zrf4kwNwlKph1dtDfp0Uhzxom5Ht4ddcy8FxjaLuB6q4Dbs12yF8IuSPJOcS6O1n5n5n+ziFgQxt6JcnuIp0e3c/0fEwhvSOKDmbXOeLAmR8oC1kskHlaTGxXNul+W9ISqYDnnCv0ZAJ3ItsODxEMcQxv8tnxMkrwXvAc4kL2Hec22bRaymQPyvBeCJh/KsY+2RKyay2eVctPqQ600+JL/qNoW0bl3KH6B5XNEbI/ZmDjx/IiVn4S7egI6lNI7hwCJjp4q5nsvUI/XhBKCUcUQ3xPk61+RFHAnFZ9xaSjqfBz3HGBr9UXZtJqAvw+ZXCkFgld68RxeLJlEfUPBLOjbhd1U6g/Q3V62FG/1jFmRy0whM8qBEAPcNCF7PAzxVxMCOh7P5/elPpXHJsZ5EeLPj8OZZfr8aXUGJC9STua6Cc4arOQzfHf3qWXLA338VT+mqGshkJfHk2g8s/JFvdoWYzQmOfgTaMoh8m5uxl4s6EdAvsR4JMLBPN5eYWaUupFGQYrGpilDRyN92s7XNyBiAVmN8mzXeh9g0yKqfD7CNngPObdgAmmWGB2F2Tc8WFc/jHTaTGN2cJtWfkSKp/Iys5gAOpu2IHnCt0vCdDtoXjzJopQLCfHEB2e6wNscUkI9EuB55E+rn8fLaz8wJxrA2d9jokbosMd2QF+VmeoIKMVsDCKtTNXWOPS7m78HvCrOpmQUr/C5ErAbhsZzGSvn5Vj+wfzFpC9LNL4/GbGMIvOWoqUoMnzTxjbMyB/q7TJOQ1mYLiEyo5hoTgOWtyNt1D5razMy+pdLXQ/xXSfWYLUONpLI0T4L0tp7iAwb7TszJ1sseNYaeLigfkqUTcz38mKC2ZqcyFzij/Uu7Oj/o3JFRjjX+H3PuBLMGMaeXx+M2NAlOxgVGrNMmVTqWwISzFLmk11i0X4DSfnRCE7jgFsQonvfPyGPetFQ/1mlsVsEeDUtYDJrPE5Mxk9vuYDc0qdnpNMsACnmGDGsbMMZt53kK1ghjCeSKnvzr6uvlkIEBbTi3bo315MeYZBdjQDBUYgbqB/v22Q7cKygluBjy8hmI8VKXFJK1l9R8sLny3A87opqdBUYKY+rRf1s/I5MWKD2VF38R0z70UUHmdeLsa30JQUikoVzOZszS7oDDbItmcRkIEU2cC/HwjQ/RwDURq4XQTTgYd2ME56G0VDbNSXPedlQ/3DrH56yG7UKCb3A31jSyQroOwE4OFQPw/TriUE840Ge7ISY9c8w0e6TtOZPjcS07sgMLuRBL+N7ob+UqR/rk7zYzQFIxDi8k8MMJcbxpcBuUE5qX28w+Gm1J+HdsarFWXsRc+g390i1svpTXacezb0oADZjpRh9PRvo7jxAIo+IJ8NPAb4GYoxc7twDDNjMOyDd0rOo/BeGwL5SJZYyZIzKelU5gd4fb+JQnu4KHuxCZtscUpq9B0G90vjbFCCpahgdpM5ywL6U08p7A36xpwlwRIbzO5VzDUxogwNBPKuscDsmnfzLJGLzTSfe6ImWNYJJ+pZyzgnC9ldtKMHUQ8BtjBewdoi2HbEaLuYwngmGsGSO5Ib6VTwJneqYYe2cU2pwHwIWPK+RHjIcH6BZsZQitzEDVVu4xGHMDAfSoi4seQ4z3KC+j6cveit4m6EpHYsPt2g7LfuPGpD2cG1lhhzFekyXQG9kpzPoPvM6ODdYTlNPMJdA+89v0WnhGfTY7iwlSEhsNBws43vihmd2Ej5wpqK4rD79YKARALeWAsEDdxFYBm3Ojy2LQ7qCLqe2hgYroMdC3RcLW1cfTS7gD4A9S+EpOqnM53LtCOKWU/I7sFYukH7c/TNOfcDg6WG/sxhpls7vIBE10kxxDnFsoCGUJix3hIiXaJNryr71/bo6Hw3IGlhSmLgPYl8PE9s11+5F5nOp4hIVCerJZkuaCPjTS78YqWbSNYUlfRF/ZT6gf6SA+OieE8ZbsjF/aqjqH3C1DWmwdFWxT5hiCulutvSzpF1uxGUg2ynDY3/669x/KDbWFAf8IYc+gSYgcXxufp72DaFhBIygXm0L5sYMXKib/Sx66XJTCbU/GB276NwG/iCCAugrc/UMNjFCSXU9GB2Exl7fV+hwG096Rcw36KnTjdbLjkllFDzATo3xuyFyd6nD3QryfndYJBbVkjSI6GESgHokYYL/fbbevhfA1RZw7QJJdRMgHYjOZfTh6kryMmrpWiHd4sQQ34386+lm5L+B8MfMah1i5DzAAAAAElFTkSuQmCC"
+                                         alt="company logo" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table aria-describedby="innermosttable">
+                                        
+                                        <tbody>
+                                            <tr>
+                                                <td class="app-name-cell">
+                                                    <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAABGZJREFUWEe9mW1oW1UYgJ83/ZhdW1uRIVsZFdxcEQVF5kDn6n4M/bGJKFTXpB1I0+jqujHU+jElqODmwNU5KU0sak0iBD9A2HQ4xU+oQ1G7wWAdytg6FRzWWi1t2vvKTRrbNEmTc5Pu/r3v+5wnp+97zrmngpNnf38ltSUNqK5FuA24EeQaoGIGNw16CjiBuD7Dsn5irPwku5vGTYcTo4Te3qVIZRcizxrlzQY/z8j0Ph5r/Sff/PwE/f5S6la9DnI3cEW+8IxxyiginzL5ZysdHWO5WLkFA5H7ED0IrMgFM3x/DtEnaPNEFsrLLmjP2orVLyI8ajiwaXgPw0Od+P1TmRIzC/qj5dRNHQO93XQ0R/HKABeGGvH7J+fnpwsmZu5DhLuA3CXgyCgtSVE+Qcc24/PF5r5NFwiE91+CP2vmn2URwOf2ZRdMNMS7jidFGMVCEWocM9AWvJ5QMn92BuNLyeqzDrt1ErQLr6c7Dg6EHkR4DeQyc1H5jeHlK/FvjDfNrGAw9CbINnMgELM2sL3lq5TcQKQR0c8d8eAoXrfdAzOC9g7hqjrvbBHWk3g9N2QUCYa/ADY4kJxEuJY299nEDAbCXQh7HYDslG/wutdnEXwPuNcRV/Ul2j1dQmLjz7nlLDDIOdqa6xHR1BgVguFTIGscCdpJf/++1IbcDHznGAKKSoQLp1vx+63/OYFwN8LOArhg6Z1CIPQQIj0FgeKS2A1xFJieWeTvAEoK48oeIRh6G8RTGGiRslUP24InQK53OISCfg0cSckXWYaluxBxOeTOpOkZuwb/nXMSNuW9z/DQ1gybvF06exF53BSYEq9M2ILzus8AqRyi3b0jY0ZxapvCBGEAS7bga/4jTbKIgvaeV0C36UVUdtLuDqdudUVZHaYLbZJkMT+J15O6ExVlBuNNEoqAbDWovAyhujiCqh/Z3bYDEfujqIBnsQTZZwuuReR4AXbAIgla1mbhYOhyKuQvx4KqhxHXU3ibB1MYvZEGXPoM0OyYbcmyxHErGHoFpNMcpB+zqm4LGxOn37QnGi1hJBZCeMCYrRqk3dOeEOzvr2TC9StItRFooYU6CQqGngZ5wYgLMWI0sN398+yRPxD+AOEeQ9D31JTdSlNT2vdsnNPbW4ar6piDU/VxvO51NmJWMFGLp4GrDCXPo6TvJAm6fY9Tb8bTEcapp9MzmiqYqMUOkENmwCJHW+zG5z6QpKZ/uAfDbwGtRR42T5xE8TbfPzc4XfDlaAXVsTPA8kt79SGD1JbeMr+eM9+99PVVM71kAJHr8vzphYUpP6KyKdOpKPvlkN2BUtmHSEtho+fKlig1pS3ZVoLct1fB0C5gD8iVuYYye68jWPLc3IbIlJ9bMLmeSdUR0EZEysxE0qLt67UfGNdNyaVkIV5+gklCzztXU2rZ3xkPO5OUV4lpt71D5JtvJpikHnijlsrydbhYj6U3IaxBZSXCkpkQ+98Qv6AMgQwifMnE1Lc8su1ivmLJuP8AgaFwSFT8YxsAAAAASUVORK5CYII="
+                                                         alt="information" />
+                                                </td>
+                                                <td class="app-name-cell">
+                                                    SummitStories Blog
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            @RenderSection("body", required: false)
+                            <tr>
+                                <td class="footer-cell">
+                                    <span>&copy; @DateTime.Now.Year, SummitStories</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
