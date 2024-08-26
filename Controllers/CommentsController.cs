@@ -1,125 +1,49 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SummitStories.API.Modules.Data.Models;
-using SummitStories.API.Modules.Data.Interfaces;
-using System.Reflection.Metadata;
+﻿using Microsoft.AspNetCore.Mvc;
+using SummitStories.Api.Modules.Data.Interfaces;
 
-namespace SummitStories.API.Controllers;
-
-[ApiController]
-[Route("api")]
-[Produces("application/json")]
-public class CommentsController : ControllerBase
+namespace SummitStories.Api.Controllers
 {
-    private readonly ICommentRepository _commentRepository;
-
-    public CommentsController(ICommentRepository commentRepository)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CommentsController : ControllerBase
     {
-        _commentRepository = commentRepository;
-    }
+        private readonly ICommentService _commentService;
 
-    [HttpGet("articles/{articleId}/comments")]
-    public IActionResult GetCommentsForArticle([FromRoute] int articleId)
-    {
-        IList<Comment> results = _commentRepository.GetCommentsForArticle(articleId);
-        return Ok(results);
-    }
-
-    [HttpPost("articles/{articleId}/comments")]
-    public async Task<IActionResult> CreateCommentForArticle([FromRoute] int articleId, [FromBody] Comment comment)
-    {
-        try
+        public CommentsController(ICommentService commentService)
         {
-            var createdComment = await _commentRepository.CreateCommentForArticleAsync(articleId, comment);
-            return CreatedAtAction("GetComment", new { id = createdComment.CommentId }, createdComment);
+            _commentService = commentService;
         }
-        catch (InvalidOperationException ex)
+
+        [HttpGet("article/{articleId}")]
+        public async Task<IActionResult> GetComments(int articleId)
         {
-            // Obsłuż przypadek, gdy artykuł nie istnieje.
-            return NotFound(ex.Message);
+            var comments = await _commentService.GetComments(articleId);
+            return Ok(comments);
         }
-        catch (Exception ex)
+
+        [HttpPost("article/{articleId}")]
+        public async Task<IActionResult> PostComment(int articleId, [FromBody] PostCommentRequest request)
         {
-            // Obsłuż inne błędy.
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        }
-    }
-
-
-    [HttpGet("articles/{articleId}/comments/{commentId}")]
-    public async Task<IActionResult> GetCommentForArticle([FromRoute] int articleId, [FromRoute] int commentId)
-    {
-        try
-        {
-            var comment = await _commentRepository.GetCommentForArticle(articleId, commentId);
-
-            if (comment == null)
+            try
             {
-                return NotFound(); // Komentarz nie został znaleziony.
+                await _commentService.AddComment(request.Content, request.AuthorName, articleId, request.RecaptchaToken);
+                return Ok();
             }
+            catch (Exception ex)
+            {
+                // Wysyłanie pełniejszego błędu w środowisku deweloperskim
+                return StatusCode(500, new { message = "An error occurred while processing your request.", details = ex.Message });
+            }
+        }
 
-            return Ok(comment);
-        }
-        catch (Exception ex)
-        {
-            // Obsłuż błąd, np. zaloguj go lub zwróć odpowiedź błędu.
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        }
+
     }
 
-
-    [HttpPut("articles/{articleId}/comments/{commentId}")]
-    public async Task<IActionResult> UpdateCommentForArticle([FromRoute] int articleId, [FromRoute] int commentId, [FromBody] Comment updatedComment)
+    // Klasa żądania POST
+    public class PostCommentRequest
     {
-        try
-        {
-            // Upewnij się, że komentarz o identyfikatorze `commentId` istnieje i należy do artykułu o identyfikatorze `articleId`.
-            var existingComment = await _commentRepository.GetCommentForArticle(articleId, commentId);
-
-            if (existingComment == null)
-            {
-                return NotFound(); // Komentarz nie został znaleziony.
-            }
-
-            // Aktualizuj pola komentarza na podstawie wartości zawartych w `updatedComment`.
-            existingComment.Content = updatedComment.Content;
-            existingComment.Author = updatedComment.Author;
-
-            // Wywołaj metodę repozytorium do aktualizacji komentarza.
-            await _commentRepository.UpdateComment(existingComment);
-
-            return Ok(existingComment);
-        }
-        catch (Exception ex)
-        {
-            // Obsłuż błąd, np. zaloguj go lub zwróć odpowiedź błędu.
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        }
-    }
-
-    [HttpDelete("articles/{articleId}/comments/{commentId}")]
-    public async Task<IActionResult> DeleteCommentForArticle([FromRoute] int articleId, [FromRoute] int commentId)
-    {
-        try
-        {
-            // Upewnij się, że komentarz o identyfikatorze `commentId` istnieje i należy do artykułu o identyfikatorze `articleId`.
-            var existingComment = await _commentRepository.GetCommentForArticle(articleId, commentId);
-
-            if (existingComment == null)
-            {
-                return NotFound(); // Komentarz nie został znaleziony.
-            }
-
-            // Usuń komentarz.
-            await _commentRepository.DeleteCommentForArticle(articleId, commentId);
-
-            return NoContent(); // Komentarz został pomyślnie usunięty.
-        }
-        catch (Exception ex)
-        {
-            // Obsłuż błąd, np. zaloguj go lub zwróć odpowiedź błędu.
-            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-        }
+        public string Content { get; set; } = string.Empty;
+        public string AuthorName { get; set; } = string.Empty;
+        public string RecaptchaToken { get; set; } = string.Empty;  // Nowe pole dla recaptchaToken
     }
 }
-

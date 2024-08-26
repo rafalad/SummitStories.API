@@ -21,9 +21,9 @@ namespace SummitStories.API.Controllers
         public async Task<IActionResult> BusinessContactRequest([FromBody] BusinessRequestEmailDetails businessRequestDetails)
         {
             var subject = $@"Inquiry from {businessRequestDetails.Name}""";
-            var LoefiAdminEmail = _configuration.GetValue<string>(nameof(AzureKeyVaultConfig.MailjetApiEmail)) ?? "";
+            var AdminEmail = _configuration.GetConnectionString("MailjetApiEmail");
 
-            var response = await _emailService.SendEmail(EmailTemplateNames.BusinessRequest, businessRequestDetails, subject, LoefiAdminEmail, businessRequestDetails.ApplicationOwnerEmail);
+            var response = await _emailService.SendEmail(EmailTemplateNames.BusinessRequest, businessRequestDetails, subject, AdminEmail, businessRequestDetails.ApplicationOwnerEmail);
 
             return Ok(response);
         }

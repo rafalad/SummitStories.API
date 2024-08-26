@@ -1,13 +1,11 @@
-﻿using SummitStories.API.Modules.Data.Models;
+﻿using SummitStories.Api.Modules.Data.Models;
 
-namespace SummitStories.API.Modules.Data.Interfaces;
-
-public interface ICommentRepository : IGenericRepository
+namespace SummitStories.Api.Modules.Data.Interfaces
 {
-    public IList<Comment> GetCommentsForArticle(int articleId);
-    Task<Comment> GetCommentForArticle(int articleId, int commentId);
-    Task<Comment> CreateCommentForArticleAsync(int articleId, Comment comment);
-    Task<Comment> UpdateCommentForArticle(int articleId, int commentId, Comment updatedComment);
-    Task UpdateComment(Comment comment);
-    Task DeleteCommentForArticle(int articleId, int commentId);
+    public interface ICommentRepository
+    {
+        Task<List<Comment>> GetCommentsByArticleId(int articleId);
+        Task AddComment(Comment comment);
+    }
+
 }
