@@ -3,6 +3,6 @@
     public class EmailTemplateNames
     {
         public const string BusinessRequest = "BusinessRequest";
-        public const string OtherService = "OtherService";
+        public const string ConfirmationTemplate = "ConfirmationTemplate";
     }
 }

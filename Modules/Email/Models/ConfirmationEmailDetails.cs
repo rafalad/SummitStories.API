@@ -1,12 +1,11 @@
 ﻿namespace SummitStories.API.Modules.Email.Models
 {
-    public class BusinessRequestEmailDetails
+    public class ConfirmationEmailDetails
     {
         public required string Name { get; set; }
 
         public required string Email { get; set; }
 
         public required string Message { get; set; }
-        public required string RecaptchaToken { get; set; }
     }
 }

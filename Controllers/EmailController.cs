@@ -20,10 +20,21 @@ namespace SummitStories.API.Controllers
         [HttpPost("email/send")]
         public async Task<IActionResult> BusinessContactRequest([FromBody] BusinessRequestEmailDetails businessRequestDetails)
         {
-            var subject = $@"Inquiry from {businessRequestDetails.Name}""";
-            var AdminEmail = _configuration.GetConnectionString("MailjetApiEmail");
+            // Pobierz token reCAPTCHA z modelu
+            var recaptchaToken = businessRequestDetails.RecaptchaToken;
 
-            var response = await _emailService.SendEmail(EmailTemplateNames.BusinessRequest, businessRequestDetails, subject, AdminEmail, businessRequestDetails.ApplicationOwnerEmail);
+            // Zweryfikuj reCAPTCHA
+            var isRecaptchaValid = await _emailService.VerifyRecaptcha(recaptchaToken);
+            if (!isRecaptchaValid)
+            {
+                return BadRequest("Failed reCAPTCHA verification.");
+            }
+
+            var subject = $@"Message from {businessRequestDetails.Name}";
+            var AdminEmail = _configuration.GetConnectionString("MailjetApiEmail");
+            var BlogOwnerEmail = _configuration.GetConnectionString("MailjetApiEmail");
+
+            var response = await _emailService.SendEmail(EmailTemplateNames.BusinessRequest, businessRequestDetails, subject, AdminEmail, BlogOwnerEmail);
 
             return Ok(response);
         }
